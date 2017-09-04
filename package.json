@@ -1,0 +1,42 @@
+{
+  "name": "filter_data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run migrate && npm run webpack && node app.js",
+    "migrate": "./node_modules/migrate/bin/migrate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drgrey87/filter_data.git"
+  },
+  "author": "Sergey Kucheyko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drgrey87/filter_data/issues"
+  },
+  "homepage": "https://github.com/drgrey87/filter_data#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
+    "immutable": "^3.8.1",
+    "migrate": "^0.2.3",
+    "mongoose": "^4.11.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^3.5.5"
+  }
+}

@@ -5,13 +5,13 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import todoApp from './reducers';
-import App from './components/App';
+import App from './containers';
 
 let store = createStore(todoApp);
 
 render(
   <Provider store={store}>
-    <App />
+    <App/>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('main')
 );

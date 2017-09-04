@@ -3,7 +3,7 @@
 const Mongoose = require('mongoose'),
   //The document structure definition
   Schema = Mongoose.Schema,
-  User = new Schema({
+  User_schema = new Schema({
     display_name: {
       type: String,
       required: true
@@ -35,8 +35,7 @@ const Mongoose = require('mongoose'),
       },
     },
     main_photo: {
-      type: String,
-      required: true
+      type: String
     },
     compatibility_score: {
       type: Number,
@@ -56,10 +55,10 @@ const Mongoose = require('mongoose'),
     }
   });
 
-User.statics.findBy = function(data) {
-  return this.find(data).exec();
+User_schema.statics.findBy = function(data) {
+  return this.find(data).lean();
 };
 
-const User = Mongoose.model('User', User);
+const User = Mongoose.model('User', User_schema);
 
 module.exports = User;
