@@ -9,4 +9,4 @@ Mongoose.connect(connection_string).then(
   err => console.log('err', err)
 );
 
-module.exports = Mongoose
+module.exports = Mongoose;

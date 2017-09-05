@@ -1,0 +1,44 @@
+.button-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__item {
+    margin-bottom: 15px;
+  }
+
+  &__btn {
+    cursor: pointer;
+  }
+
+  &__range {
+
+    &:first-child {
+      margin-bottom: 5px;
+    }
+
+    &-from,
+    &-to {
+
+      &-txt {
+        margin-right: 5px;
+      }
+
+      &-btn {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__number {
+
+    &-txt {
+      margin-right: 5px;
+    }
+
+    &-btn {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 'use strict';
 
 const Mongoose = require('mongoose'),
-  //The document structure definition
+  get_distance = require('../../helpers'),
   Schema = Mongoose.Schema,
   User_schema = new Schema({
     display_name: {
@@ -55,8 +55,26 @@ const Mongoose = require('mongoose'),
     }
   });
 
-User_schema.statics.findBy = function(data) {
-  return this.find(data).lean();
+User_schema.statics.findBy = function(data, user) {
+  let query_chain = this.find()
+    .exists('main_photo', data.main_photo.value);
+
+  if (data.contacts_exchanged.value) {
+    query_chain
+      .where('contacts_exchanged').gt(0);
+  } else {
+    query_chain
+      .where('contacts_exchanged', 0);
+  }
+
+  return query_chain
+    .where('favourite', data.favourite.value)
+    .where('compatibility_score').gte(data.compatibility_score.from/data.compatibility_score.divider).lte(data.compatibility_score.to/data.compatibility_score.divider)
+    .where('age').gte(data.age.from).lte(data.age.to)
+    .where('height_in_cm').gte(data.height_in_cm.from).lte(data.height_in_cm.to)
+    .where('_id').ne(user._id)
+    .lean()
+    .then(result => result.filter(item => get_distance(user.city.lat, user.city.lon, item.city.lat, item.city.lon) >= data.distance.value));
 };
 
 const User = Mongoose.model('User', User_schema);

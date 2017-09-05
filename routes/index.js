@@ -2,18 +2,12 @@
 
 const express  = require('express'),
   router = express.Router(),
-  config = require('../config/config'),
   UserModel = require('../database/models/User');
 
-router.get('/', (req, res) => {
-  res.render('index', {
-    data: config.filter_data
-  });
-});
-
-router.get('/data/*', (req, res) => {
-  let data = req.data;
-  res.send(data);
+router.post('/', (req, res) => {
+  UserModel.findBy(req.body, req.app.locals.user)
+    .then(data => res.send(data))
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

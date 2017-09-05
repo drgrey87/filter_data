@@ -1,10 +1,10 @@
 'use strict';
 
-import { Record, List } from 'immutable';
+import { fromJS } from 'immutable';
 
-const InitialState = Record({
-  data: List(),
-  isFetching: false,
+const InitialState = fromJS({
+  data: [],
+  is_fetching: false,
   error: null,
 });
 

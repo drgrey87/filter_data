@@ -8,6 +8,8 @@ const express = require('express'),
   db = require('./database/mongodb'),
   serveStatic = require('serve-static'),
   router = require('./routes'),
+  bodyParser = require('body-parser'),
+  UserModel = require('./database/models/User'),
   app = express();
 
 app.engine('.hbs', exphbs({
@@ -19,8 +21,28 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 app.set('index', path.join(__dirname, 'views'));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
-app.use('*', router);
+app.use(function(req, res, next) {
+  if(!req.app.locals.user) {
+    UserModel.findOne({})
+      .then(data => {
+        app.locals.user = data;
+        next();
+      })
+      .catch(err => console.log(err));
+  } else {
+    next();
+  }
+});
+app.use(bodyParser.json());
+app.get('/', (req, res) => {
+  res.render('index', {
+    data: config.filter_data
+  });
+});
+app.use('/data', router);
 
 app.listen(config.app_port, () => {
   console.log(`Example app listening on port ${config.app_port}!`);
 });
+
+module.exports = app;
