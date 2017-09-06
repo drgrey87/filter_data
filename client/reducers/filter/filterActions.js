@@ -25,10 +25,9 @@ export function get_filtered_data_failure(json) {
   };
 }
 
-export function getFilteredData(data) {
+export function get_filtered_data(data) {
   return (dispatch) => {
     dispatch(get_filtered_data_request());
-    // store or get a sessionToken
     return fetch_filtered_data(data)
       .then((json) => {
         dispatch(get_filtered_data_success(json));

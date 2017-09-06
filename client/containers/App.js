@@ -78,7 +78,7 @@ class App extends PureComponent {
   }
 
   update_list_items(data) {
-    this.props.actions.getFilteredData(data);
+    this.props.actions.get_filtered_data(data);
   }
 
   get_initial_request_data() {

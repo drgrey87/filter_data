@@ -1,6 +1,7 @@
 'use strict';
 
 import config from '../config';
+import fetch from 'isomorphic-fetch';
 
 export function fetch_filtered_data(data) {
   return fetch(`http://${config.app_server.ip}:${config.app_server.port}/data`, {
