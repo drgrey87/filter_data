@@ -10,7 +10,8 @@ const Mongoose = require('mongoose'),
     },
     age: {
       type: Number,
-      required: true
+      required: true,
+      index: true
     },
     job_title: {
       type: String,
@@ -18,7 +19,8 @@ const Mongoose = require('mongoose'),
     },
     height_in_cm:{
       type: Number,
-      required: true
+      required: true,
+      index: true
     },
     city: {
       name: {
@@ -39,7 +41,8 @@ const Mongoose = require('mongoose'),
     },
     compatibility_score: {
       type: Number,
-      required: true
+      required: true,
+      index: true
     },
     contacts_exchanged: {
       type: Number,
@@ -47,7 +50,8 @@ const Mongoose = require('mongoose'),
     },
     favourite: {
       type: Boolean,
-      required: true
+      required: true,
+      index: true
     },
     religion: {
       type: String,
