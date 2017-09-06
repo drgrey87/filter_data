@@ -29,7 +29,8 @@ class App extends PureComponent {
     super(props);
 
     this.state = this.create_state(BUTTONS);
-    this.handle_panel_event = this.handle_panel_event.bind(this);
+    this.handle_change_event = this.handle_change_event.bind(this);
+    this.handle_click_event = this.handle_click_event.bind(this);
     this.debounced_handle_event = _.debounce(this.debounced_handle_event, 100);
   }
 
@@ -41,7 +42,17 @@ class App extends PureComponent {
     return state;
   }
 
-  debounced_handle_event(currentTarget) {
+  handle_change_event(e) {
+    e.persist();
+
+    this.debounced_handle_event(e.currentTarget);
+  }
+
+  handle_click_event(e) {
+    this.change_state(e.currentTarget);
+  }
+
+  change_state(currentTarget) {
     let shortly = currentTarget.dataset.shortly,
       btn = Object.assign({}, this.state[shortly]);
 
@@ -62,10 +73,8 @@ class App extends PureComponent {
     });
   }
 
-  handle_panel_event(e) {
-    e.persist();
-
-    this.debounced_handle_event(e.currentTarget);
+  debounced_handle_event(currentTarget) {
+    this.change_state(currentTarget);
   }
 
   update_list_items(data) {
@@ -76,7 +85,6 @@ class App extends PureComponent {
     let request_data = {};
     let state = this.state;
     for (let key in state) {
-      let default_obj = {};
       switch (state[key].type) {
         case 'checkbox':
           request_data[key] = {
@@ -107,11 +115,11 @@ class App extends PureComponent {
 
   render () {
     return (
-      this.props.filter_data.get('is_fetching')
-        ? <FetchingModal />
-        :
+      // this.props.filter_data.get('is_fetching')
+      //   ? <FetchingModal />
+      //   :
         <div className="main-block">
-          <Panel handle_panel_event={this.handle_panel_event} buttons={this.state} />
+          <Panel handle_change_event={this.handle_change_event} handle_click_event={this.handle_click_event} buttons={this.state} />
           <FilterList list={this.props.filter_data.get('data')}/>
         </div>
     )
