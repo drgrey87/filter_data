@@ -25,6 +25,8 @@
   * jest
   * enzyme
   * nock
+  * sinon
+  * chai
   
 ## Run project  
 1. install node js (lts or higher)
