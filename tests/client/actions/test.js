@@ -1,16 +1,16 @@
 'use strict';
 
-import * as actions from '../../reducers/filter/filterActions';
+import * as actions from '../../../client/reducers/filter/filterActions';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
-import config from '../../config';
+import config from '../../../client/config';
 
 const {
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
   GET_DATA_FAILURE
-} = require('../../constants').default;
+} = require('../../../client/constants').default;
 
 
 const post_data = {

@@ -1,14 +1,14 @@
 'use strict';
 
-import activitiesReducer from '../../reducers/filter/filterReducer';
-import initial_state from '../../reducers/filter/filterInitialState';
+import activitiesReducer from '../../../client/reducers/filter/filterReducer';
+import initial_state from '../../../client/reducers/filter/filterInitialState';
 import { List } from 'immutable';
 
 const {
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
   GET_DATA_FAILURE
-} = require('../../constants').default;
+} = require('../../../client/constants').default;
 
 describe('filter reducer', () => {
   it('should return the initial state', () => {

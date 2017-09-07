@@ -2,5 +2,5 @@
 
 module.exports = {
   verbose: true,
-  rootDir: "./client/test"
+  rootDir: "./tests"
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import Panel from '../../components/Panel';
-import FilterItem from '../../components/FilterItem';
+import Panel from '../../../client/components/Panel';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -20,7 +19,7 @@ function setup() {
   };
 }
 
-function mockItem(overrides) {
+function mockItem() {
   return {
     age: {
       text: 'age',
@@ -32,8 +31,14 @@ function mockItem(overrides) {
       max: 95,
       measure: 'years old',
       step: 1
-    }
-  };
+    },
+    main_photo: {
+      text: 'Has photo',
+      shortly: 'main_photo',
+      type: 'checkbox',
+      value: true
+    },
+  }
 }
 
 describe('components', () => {
@@ -55,7 +60,6 @@ describe('components', () => {
 
     describe('behaviour', () => {
       it('calls handle_range_change_event handler with the right arguments when clicked', () => {
-        const spy = sinon.spy();
         const item = mockItem();
         const wrapper = shallow(<Panel buttons={item} />);
         wrapper.find('.button-block__range-from-btn').filterWhere((item) => {
@@ -64,34 +68,26 @@ describe('components', () => {
         expect(wrapper.find('.button-block__range-to-warning').every('.hide')).to.be.false;
       });
 
-      it('calls handle_range_change_event handler with the right arguments when clicked', () => {
+      it('calls handle_change_event with the right arguments when clicked', () => {
         const spy = sinon.spy();
         const item = mockItem();
-        const wrapper = shallow(<Panel buttons={item} />);
-        wrapper.find('.button-block__range-from-btn').filterWhere((item) => {
+        const wrapper = shallow(<Panel buttons={item} handle_change_event={spy} />);
+        wrapper.find('.button-block__range-from-btn').filterWhere(item => {
           return item.prop('name') === 'age';
         }).simulate('keydown', { which: 500 });
         expect(wrapper.find('.button-block__range-to-warning').every('.hide')).to.be.false;
+        expect(spy.calledOnce).to.be.false;
+      });
+
+      it('calls handle_click_event with the right arguments when clicked', () => {
+        const spy = sinon.spy();
+        const item = mockItem();
+        const wrapper = shallow(<Panel buttons={item} handle_click_event={spy} />);
+        wrapper.find('.button-block__btn').filterWhere(item => {
+          return item.prop('data-shortly') === 'main_photo';
+        }).simulate('click');
+        expect(spy.calledOnce).to.be.true;
       });
     });
   });
-
-  // describe('FilterItem', () => {
-  //   const item = mockItem();
-  //   const wrapper = shallow(<FilterItem item={item} />);
-  //
-  //   describe('shallow', () => {
-  //     it('check warnings', () => {
-  //       expect(wrapper.find('.item-mark').text()).to.equal('✓');
-  //     });
-  //     it('calls onCompleteChange handler with the right arguments when clicked', () => {
-  //       const spy = sinon.spy();
-  //       const item = mockItem();
-  //       const wrapper = shallow(<ToDoItem item={item} onCompleteChange={spy} />);
-  //       wrapper.find('.item-button').simulate('click');
-  //       expect(spy.calledOnce).to.be.true;
-  //       expect(spy.calledWith(item, false)).to.be.true;
-  //     });
-  //   });
-  // });
 });
