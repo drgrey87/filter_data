@@ -6,10 +6,10 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "start": "npm run migrate && npm run webpack && node app.js",
+    "start": "npm run migrate && npm run webpack && node server.js",
     "migrate": "./node_modules/migrate/bin/migrate",
     "webpack": "./node_modules/webpack/bin/webpack.js",
-    "nodemon": "./node_modules/nodemon/bin/nodemon.js --ignore client/ --delay 2500ms app.js"
+    "nodemon": "./node_modules/nodemon/bin/nodemon.js --ignore client/ --delay 2500ms server.js"
   },
   "repository": {
     "type": "git",
@@ -58,6 +58,8 @@
     "sass-loader": "^6.0.6",
     "sinon": "^3.2.1",
     "style-loader": "^0.18.2",
+    "superagent": "^3.6.0",
+    "supertest": "^3.0.0",
     "webpack": "^3.5.5"
   }
 }

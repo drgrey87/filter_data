@@ -46,8 +46,4 @@ app.get('/favicon.ico', function(req, res) {
   res.status(204);
 });
 
-app.listen(config.app_port, () => {
-  console.log(`Example app listening on port ${config.app_port}!`);
-});
-
 module.exports = app;
