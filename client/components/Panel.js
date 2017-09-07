@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react';
 
-const WARNING_TXT = `To can't be less from`;
+const WARNING_TXT_TO = `To can't be less from`;
+const WARNING_TXT_FROM = `From can't be more to`;
 export const BUTTONS = [
   {
     text: 'Has photo',
@@ -109,12 +110,12 @@ export default class Panel extends Component {
           <div className="button-block__range-from">
             <span className="button-block__range-from-txt">{`${item.text} from`}</span>
             <input className="button-block__range-from-btn" onChange={this.handle_range_change_event} type='number' name={item.text} data-shortly={item.shortly} min={item.min} max={item.max} step={item.step} defaultValue={item.from} data-range="from" data-measure={item.measure}/>
-            <span className={`button-block__range-from-warning ${this.state.from_warning}`}>{WARNING_TXT}</span>
+            <span className={`button-block__range-from-warning ${this.state.from_warning}`}>{WARNING_TXT_FROM}</span>
           </div>
           <div className="button-block__range-to" key={number.toString()}>
             <span className="button-block__range-to-txt">{`${item.text} to`}</span>
             <input className="button-block__range-to-btn" onChange={this.handle_range_change_event} type='number' name={item.text} data-shortly={item.shortly} min={item.min} max={item.max} step={item.step} defaultValue={item.to} data-range="to" data-measure={item.measure}/>
-            <span className={`button-block__range-to-warning ${this.state.from_warning}`}>{WARNING_TXT}</span>
+            <span className={`button-block__range-to-warning ${this.state.to_warning}`}>{WARNING_TXT_TO}</span>
           </div>
         </div>);
         break;

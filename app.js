@@ -34,12 +34,17 @@ app.use(function(req, res, next) {
   }
 });
 app.use(bodyParser.json());
+app.use('/data', router);
+
+
 app.get('/', (req, res) => {
   res.render('index', {
     data: config.filter_data
   });
 });
-app.use('/data', router);
+app.get('/favicon.ico', function(req, res) {
+  res.status(204);
+});
 
 app.listen(config.app_port, () => {
   console.log(`Example app listening on port ${config.app_port}!`);
