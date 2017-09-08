@@ -14,3 +14,7 @@ export function fetch_filtered_data(data) {
     .then(data => data.json())
     .catch(err => console.log(err));
 };
+
+export function min_max_validation(value, min, max) {
+  return value < min || value > max;
+}

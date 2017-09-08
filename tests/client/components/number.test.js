@@ -4,20 +4,6 @@ import Number from '../../../client/components/Number';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
-function setup() {
-  const props = {
-    handle_change_event: () => {},
-    item: {}
-  };
-
-  const enzymeWrapper = mount(<Number {...props} />);
-
-  return {
-    props,
-    enzymeWrapper
-  };
-}
-
 function mockItem() {
   return {
       text: 'distance in km',
@@ -33,22 +19,43 @@ function mockItem() {
 
 describe('components', () => {
   describe('<Number/>', () => {
-    const { enzymeWrapper } = setup();
 
     describe('initialize', () => {
       it('check state and props', () => {
-        expect(enzymeWrapper.prop('handle_change_event')).to.be.a('function');
-        expect(enzymeWrapper.prop('item')).to.be.a('object');
+        const item = mockItem();
+        const spy = sinon.spy();
+        const wrapper = shallow(<Number item={item} handle_change_event={spy}/>);
+        expect(wrapper.instance().props.handle_change_event).to.be.a('function');
+        expect(wrapper.instance().props.item).to.be.a('object');
+        expect(wrapper.state().value).to.equal(mockItem().value);
       });
     });
 
     describe('behaviour', () => {
+
       it('calls handle_change_event with the right arguments when clicked', () => {
         const spy = sinon.spy();
         const item = mockItem();
-        const wrapper = shallow(<Number item={item} handle_change_event={spy} />);
-        wrapper.find('.button-block__number-btn').simulate('change', {});
+        const clock = sinon.useFakeTimers();
+        const wrapper = shallow(<Number item={item} handle_change_event={spy}/>);
+        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: 40}});
+        clock.tick(200);
         expect(spy.calledOnce).to.be.true;
+        expect(wrapper.state().value).to.equal(40);
+        expect(wrapper.find('.button-block__number-btn').props().defaultValue).to.equal(40);
+        clock.restore();
+      });
+
+      it('calls handle_change_event with the less min value', () => {
+        const spy = sinon.spy();
+        const item = mockItem();
+        const clock = sinon.useFakeTimers();
+        const wrapper = shallow(<Number item={item} handle_change_event={spy}/>);
+        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: mockItem().min - 10}});
+        clock.tick(200);
+        expect(wrapper.state().value).to.equal(mockItem().min);
+        expect(wrapper.find('.button-block__number-btn').props().defaultValue).to.equal(mockItem().value);
+        clock.restore();
       });
     });
   });

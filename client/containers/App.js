@@ -6,7 +6,6 @@ import Panel from '../components/Panel';
 import FilterList from '../components/FilterList';
 import {BUTTONS} from '../components/Panel';
 import FetchingModal from "../components/FetchingModal";
-import _ from 'lodash';
 
 import * as filterActions from '../reducers/filter/filterActions';
 
@@ -31,7 +30,6 @@ class App extends PureComponent {
     this.state = this.create_state(BUTTONS);
     this.handle_change_event = this.handle_change_event.bind(this);
     this.handle_click_event = this.handle_click_event.bind(this);
-    this.debounced_handle_event = _.debounce(this.debounced_handle_event, 100);
   }
 
   create_state(BUTTONS) {
@@ -42,39 +40,34 @@ class App extends PureComponent {
     return state;
   }
 
-  handle_change_event(e) {
-    e.persist();
-
-    this.debounced_handle_event(e.currentTarget);
+  handle_change_event(item) {
+    this.change_state(item);
   }
 
   handle_click_event(e) {
     this.change_state(e.currentTarget);
   }
 
-  change_state(currentTarget) {
-    let shortly = currentTarget.dataset.shortly,
+  change_state(item) {
+    let shortly = item.shortly,
       btn = Object.assign({}, this.state[shortly]);
 
     switch (btn.type) {
       case 'checkbox':
-        btn.value = currentTarget.checked;
+        btn.value = item.checked;
         break;
       case 'range':
-        btn[currentTarget.dataset.range] = +currentTarget.value;
+        btn.from = +item.from;
+        btn.to = +item.to;
         break;
       case 'number':
-        btn.value = +currentTarget.value;
+        btn.value = +item.value;
         break;
     }
 
     this.setState({[shortly]: btn}, () => {
       this.update_list_items(this.get_initial_request_data());
     });
-  }
-
-  debounced_handle_event(currentTarget) {
-    this.change_state(currentTarget);
   }
 
   update_list_items(data) {

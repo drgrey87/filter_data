@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import Checkbox from '../../../client/components/Checkbox';
+import Checkbox from '../../../client/components/CheckBox';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
