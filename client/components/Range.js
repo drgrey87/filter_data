@@ -35,8 +35,8 @@ export default class Range extends PureComponent {
       is_to = range === 'to';
 
     if (min_max_validation(value, this.state.min, this.state.max)) {
-      // this.forceUpdate();
-      return currentTarget.value = is_from ? this.state.from : this.state.to;
+      currentTarget.value = is_from ? this.state.min : this.state.max;
+      value = currentTarget.value;
     }
 
     if ((is_from && value < this.state.to) || (is_to && value > this.state.from)) {

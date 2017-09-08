@@ -26,9 +26,8 @@ export default class Number extends PureComponent {
       value = +currentTarget.value;
 
     if (min_max_validation(value, this.state.min, this.state.max)) {
-      // this.forceUpdate();
-      return currentTarget.value = this.state.value;
-      // return this.forceUpdate()
+      currentTarget.value = this.state.value;
+      value = currentTarget.value;
     }
 
     item.value = value;

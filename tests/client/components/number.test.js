@@ -32,29 +32,50 @@ describe('components', () => {
     });
 
     describe('behaviour', () => {
-
-      it('calls handle_change_event with the right arguments when clicked', () => {
-        const spy = sinon.spy();
+      it('VALUE < MIN', () => {
         const item = mockItem();
+        const spy = sinon.spy();
         const clock = sinon.useFakeTimers();
         const wrapper = shallow(<Number item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: 40}});
+        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: item.min - 1}});
         clock.tick(200);
+        expect(wrapper.find('.button-block__number-btn').props().defaultValue).to.equal(mockItem().value);
         expect(spy.calledOnce).to.be.true;
-        expect(wrapper.state().value).to.equal(40);
-        expect(wrapper.find('.button-block__number-btn').props().defaultValue).to.equal(40);
         clock.restore();
       });
 
-      it('calls handle_change_event with the less min value', () => {
-        const spy = sinon.spy();
+      it('VALUE > MIN', () => {
         const item = mockItem();
+        const spy = sinon.spy();
         const clock = sinon.useFakeTimers();
         const wrapper = shallow(<Number item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: mockItem().min - 10}});
+        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: item.min + 1}});
         clock.tick(200);
-        expect(wrapper.state().value).to.equal(mockItem().min);
+        expect(spy.calledOnce).to.be.true;
+        expect(wrapper.find('.button-block__number-btn').props().defaultValue).to.equal(item.min + 1);
+        clock.restore();
+      });
+
+      it('VALUE > MAX', () => {
+        const item = mockItem();
+        const spy = sinon.spy();
+        const clock = sinon.useFakeTimers();
+        const wrapper = shallow(<Number item={item} handle_change_event={spy}/>);
+        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: mockItem().max + 1}});
+        clock.tick(200);
         expect(wrapper.find('.button-block__number-btn').props().defaultValue).to.equal(mockItem().value);
+        clock.restore();
+      });
+
+      it('VALUE < MAX', () => {
+        const item = mockItem();
+        const spy = sinon.spy();
+        const clock = sinon.useFakeTimers();
+        const wrapper = shallow(<Number item={item} handle_change_event={spy}/>);
+        wrapper.find('.button-block__number-btn').simulate('change', {currentTarget: {value: mockItem().max - 1}});
+        clock.tick(200);
+        expect(spy.calledOnce).to.be.true;
+        expect(wrapper.find('.button-block__number-btn').props().defaultValue).to.equal(mockItem().max - 1);
         clock.restore();
       });
     });
