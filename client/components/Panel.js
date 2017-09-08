@@ -1,9 +1,10 @@
 'use strict';
 
 import React, { Component } from 'react';
+import CheckBox from './CheckBox';
+import Range from './Range';
+import Number from './Number';
 
-const WARNING_TXT_TO = `To can't be less from`;
-const WARNING_TXT_FROM = `From can't be more to`;
 export const BUTTONS = [
   {
     text: 'Has photo',
@@ -72,58 +73,19 @@ export const BUTTONS = [
 export default class Panel extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      from_warning: '',
-      to_warning: ''
-    };
-
-    this.handle_range_change_event = this.handle_range_change_event.bind(this);
   }
 
-  handle_range_change_event(e) {
-    let current_shortly = e.currentTarget.dataset.shortly,
-      range = e.currentTarget.dataset.range,
-      value  = +e.currentTarget.value,
-      is_from = range === 'from',
-      is_to = range === 'to';
-    if ((is_from && value < this.props.buttons[current_shortly].to) || (is_to && value > this.props.buttons[current_shortly].from)) {
-      this.props.handle_change_event(e);
-      this.setState({
-        from_warning: '',
-        to_warning: ''
-      })
-    } else {
-      is_from ? this.setState({from_warning: 'hide'}) : this.setState({to_warning: 'hide'});
-    }
-  }
 
   create_button(item, number) {
     switch (item.type) {
       case 'checkbox':
-        return (<div className="button-block__item button-block__checkbox" key={number.toString()}>
-          <input className="button-block__btn" onClick={this.props.handle_click_event} defaultChecked={item.value} type={item.type} name={item.text} data-shortly={item.shortly}/>
-          <span className="button-block__txt">{item.text}</span>
-        </div>);
+        return <CheckBox item={item} key={number.toString()} handle_click_event={this.props.handle_click_event}/>;
         break;
       case 'range':
-        return (<div className="button-block__item button-block__range" key={number.toString()}>
-          <div className="button-block__range-from">
-            <span className="button-block__range-from-txt">{`${item.text} from`}</span>
-            <input className="button-block__range-from-btn" onChange={this.handle_range_change_event} type='number' name={item.text} data-shortly={item.shortly} min={item.min} max={item.max} step={item.step} defaultValue={item.from} data-range="from" data-measure={item.measure}/>
-            <span className={`button-block__range-from-warning ${this.state.from_warning}`}>{WARNING_TXT_FROM}</span>
-          </div>
-          <div className="button-block__range-to" key={number.toString()}>
-            <span className="button-block__range-to-txt">{`${item.text} to`}</span>
-            <input className="button-block__range-to-btn" onChange={this.handle_range_change_event} type='number' name={item.text} data-shortly={item.shortly} min={item.min} max={item.max} step={item.step} defaultValue={item.to} data-range="to" data-measure={item.measure}/>
-            <span className={`button-block__range-to-warning ${this.state.to_warning}`}>{WARNING_TXT_TO}</span>
-          </div>
-        </div>);
+        return <Range item={item} key={number.toString()} handle_change_event={this.props.handle_change_event} />;
         break;
       case 'number':
-        return (<div className="button-block__item button-block__number" key={number.toString()}>
-          <span className="button-block__number-txt">{item.text}</span>
-          <input className="button-block__number-btn" onChange={this.props.handle_change_event} type={item.type} name={item.text} data-shortly={item.shortly} min={item.min} max={item.max} step={item.step} defaultValue={item.value} data-measure={item.measure}/>
-        </div>);
+        return <Number item={item} key={number.toString()} handle_change_event={this.props.handle_change_event}/>;
         break;
     }
   }

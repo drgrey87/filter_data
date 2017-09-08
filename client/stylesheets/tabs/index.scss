@@ -31,10 +31,10 @@
 
       &-warning {
         color: #c70000;
-        display: none;
+        display: block;
 
         &.hide {
-          display: block;
+          display: none;
         }
       }
     }
