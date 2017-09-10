@@ -7,7 +7,7 @@ import sinon from 'sinon';
 function setup() {
   const props = {
     handle_click_event: () => {},
-    item: {}
+    item: mockItem()
   };
 
   const enzymeWrapper = mount(<Checkbox {...props} />);
@@ -35,6 +35,7 @@ describe('components', () => {
       it('check state and props', () => {
         expect(enzymeWrapper.prop('handle_click_event')).to.be.a('function');
         expect(enzymeWrapper.prop('item')).to.be.a('object');
+        expect(enzymeWrapper.find('.button-block__btn').props().defaultChecked).to.be.true;
       });
     });
 
@@ -43,8 +44,9 @@ describe('components', () => {
         const spy = sinon.spy();
         const item = mockItem();
         const wrapper = shallow(<Checkbox item={item} handle_click_event={spy} />);
-        wrapper.find('.button-block__btn').simulate('click');
+        wrapper.find('.button-block__btn').simulate('click', {currentTarget: {checked: false}});
         expect(spy.calledOnce).to.be.true;
+        expect(wrapper.find('.button-block__btn').props().defaultChecked).to.be.false;
       });
     });
   });

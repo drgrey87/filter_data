@@ -44,8 +44,8 @@ class App extends PureComponent {
     this.change_state(item);
   }
 
-  handle_click_event(e) {
-    this.change_state(e.currentTarget);
+  handle_click_event(item) {
+    this.change_state(item);
   }
 
   change_state(item) {
@@ -54,7 +54,7 @@ class App extends PureComponent {
 
     switch (btn.type) {
       case 'checkbox':
-        btn.value = item.checked;
+        btn.value = item.value;
         break;
       case 'range':
         btn.from = +item.from;
