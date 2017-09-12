@@ -23,7 +23,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-class App extends PureComponent {
+export class App extends PureComponent {
   constructor(props) {
     super(props);
 

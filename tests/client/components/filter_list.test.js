@@ -44,7 +44,7 @@ function mockItem(data) {
 }
 
 describe('components', () => {
-  describe('FilterList', () => {
+  describe('<FilterList/>', () => {
 
     describe('initialize', () => {
       it('check empty list', () => {

@@ -52,7 +52,7 @@ function mockItem() {
 };
 
 describe('components', () => {
-  describe('Panel', () => {
+  describe('<Panel/>', () => {
     const { enzymeWrapper } = setup();
 
     describe('initialize', () => {

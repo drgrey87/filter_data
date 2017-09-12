@@ -10,7 +10,7 @@ function mockItem(data) {
 }
 
 describe('components', () => {
-  describe('FilterItem', () => {
+  describe('<FilterItem/>', () => {
 
     describe('initialize', () => {
 
