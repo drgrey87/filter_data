@@ -90,7 +90,7 @@ export default class Panel extends Component {
     }
   }
 
-  get buttons() {
+  get_buttons() {
     let buttons_prop = this.props.buttons,
       array_btns = [],
       count = 0;
@@ -104,7 +104,7 @@ export default class Panel extends Component {
   render () {
     return (
       <div className="button-block">
-        {this.buttons}
+        {this.get_buttons()}
       </div>
     )
   }
