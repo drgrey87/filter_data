@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
+    "test:coverage": "./node_modules/jest/bin/jest.js -c jest.config.js --coverage",
     "start": "npm run migrate && npm run webpack && node server.js",
     "migrate": "./node_modules/migrate/bin/migrate",
     "webpack": "./node_modules/webpack/bin/webpack.js",

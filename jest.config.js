@@ -2,5 +2,6 @@
 
 module.exports = {
   verbose: true,
-  rootDir: "./tests"
+  coverageDirectory: './tests',
+  coveragePathIgnorePatterns : ["/node_modules/", "/tests/", "/assets/"]
 };
