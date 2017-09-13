@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Panel from '../components/Panel';
 import FilterList from '../components/FilterList';
 import {BUTTONS} from '../components/Panel';
-import FetchingModal from "../components/FetchingModal";
 
 import * as filterActions from '../reducers/filter/filterActions';
 
@@ -108,9 +107,6 @@ export class App extends PureComponent {
 
   render () {
     return (
-      // this.props.filter_data.get('is_fetching')
-      //   ? <FetchingModal />
-      //   :
         <div className="main-block">
           <Panel handle_change_event={this.handle_change_event} handle_click_event={this.handle_click_event} buttons={this.state} />
           <FilterList list={this.props.filter_data.get('data')}/>

@@ -77,17 +77,19 @@ export default class Panel extends Component {
 
 
   create_button(item, number) {
+    let button = null;
     switch (item.type) {
       case 'checkbox':
-        return <CheckBox item={item} key={number.toString()} handle_click_event={this.props.handle_click_event}/>;
+        button = <CheckBox item={item} key={number.toString()} handle_click_event={this.props.handle_click_event}/>;
         break;
       case 'range':
-        return <Range item={item} key={number.toString()} handle_change_event={this.props.handle_change_event} />;
+        button = <Range item={item} key={number.toString()} handle_change_event={this.props.handle_change_event} />;
         break;
       case 'number':
-        return <Number item={item} key={number.toString()} handle_change_event={this.props.handle_change_event}/>;
+        button = <Number item={item} key={number.toString()} handle_change_event={this.props.handle_change_event}/>;
         break;
     }
+    return button;
   }
 
   get_buttons() {
