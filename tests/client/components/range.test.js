@@ -34,136 +34,246 @@ function mockItem() {
 
 describe('Components', () => {
   describe('<Range/>', () => {
-    const { enzymeWrapper } = setup();
 
     describe('Initialize', () => {
       it('Warnings', () => {
+        const { enzymeWrapper } = setup();
         expect(enzymeWrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.true;
         expect(enzymeWrapper.find('.button-block__range-from-warning').hasClass('hide')).to.be.true;
       });
       it('State and Props', () => {
+        const item = mockItem();
+        const create_state = sinon.spy(Range.prototype, 'create_state');
+        const { enzymeWrapper } = setup();
+
         expect(enzymeWrapper.state()).to.be.a('object');
         expect(enzymeWrapper.prop('handle_change_event')).to.be.a('function');
         expect(enzymeWrapper.prop('item')).to.be.a('object');
+
+        expect(create_state.calledOnce).to.be.true;
+        expect(create_state.returnValues[0])
+          .to.deep.equal(Object.assign({
+          from_warning: 'hide',
+          to_warning: 'hide'
+        }, item));
+        expect(enzymeWrapper.state().from).to.equal(item.from);
+        expect(enzymeWrapper.state().to).to.equal(item.to);
+
+        create_state.restore();
       });
     });
 
     describe('Behaviour', () => {
+      let handle_range_change_event,
+        debounced_handle_change_event,
+        wrapper,
+        item,
+        cloned_item,
+        spy,
+        clock;
+
+      beforeEach(() => {
+        handle_range_change_event = sinon.spy(Range.prototype, 'handle_range_change_event');
+        spy = sinon.spy(),
+        item = mockItem(),
+        cloned_item = Object.assign({}, item),
+        debounced_handle_change_event = sinon.spy(Range.prototype, 'debounced_handle_change_event'),
+        wrapper = shallow(<Range item={item} handle_change_event={spy}/>),
+        clock = sinon.useFakeTimers();
+      });
+
+      afterEach(() => {
+        handle_range_change_event.restore();
+        debounced_handle_change_event.restore();
+        clock.restore();
+      });
+
+
       it('TO < MIN', () => {
-        const item = mockItem();
-        const spy = sinon.spy();
-        const clock = sinon.useFakeTimers();
-        const wrapper = shallow(<Range item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__range-to-btn').simulate('change', {currentTarget: {dataset: {range: 'to'}, value: mockItem().min - 1}});
+        const change_event = {currentTarget: {dataset: {range: 'to'}, value: cloned_item.min - 1}};
+        wrapper.find('.button-block__range-to-btn').simulate('change', change_event);
+
+        expect(handle_range_change_event.calledWith(change_event)).to.be.true;
+        expect(handle_range_change_event.calledOnce).to.be.true;
+
         clock.tick(200);
+
+        expect(debounced_handle_change_event.calledWith(change_event.currentTarget)).to.be.true;
+        expect(debounced_handle_change_event.calledOnce).to.be.true;
+        expect(spy.calledOnce).to.be.true;
+        expect(spy.calledWith(Object.assign({
+          from_warning: 'hide',
+          to_warning: 'hide'
+        }, cloned_item))).to.be.true;
+        expect(wrapper.state().from).to.equal(cloned_item.from);
+        expect(wrapper.state().to).to.equal(cloned_item.to);
+
         expect(wrapper.state().from_warning).to.equal('hide');
         expect(wrapper.state().to_warning).to.equal('hide');
         expect(wrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.true;
         expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(mockItem().max);
         expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(mockItem().from);
-        clock.restore();
       });
 
       it('TO > MIN', () => {
-        const item = mockItem();
-        const spy = sinon.spy();
-        const clock = sinon.useFakeTimers();
-        const wrapper = shallow(<Range item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__range-to-btn').simulate('change', {currentTarget: {dataset: {range: 'to'}, value: mockItem().min + 1}});
+        const change_event = {currentTarget: {dataset: {range: 'to'}, value: cloned_item.min + 1}};
+        wrapper.find('.button-block__range-to-btn').simulate('change', change_event);
+
+        expect(handle_range_change_event.calledWith(change_event)).to.be.true;
+        expect(handle_range_change_event.calledOnce).to.be.true;
+
         clock.tick(200);
+
+        expect(debounced_handle_change_event.calledWith(change_event.currentTarget)).to.be.true;
+        expect(debounced_handle_change_event.calledOnce).to.be.true;
+        expect(spy.calledOnce).to.be.true;
+        expect(spy.calledWith(Object.assign({
+          from_warning: 'hide',
+          to_warning: 'hide'
+        }, cloned_item, {to: cloned_item.min + 1}))).to.be.true;
+        expect(wrapper.state().from).to.equal(cloned_item.from);
+        expect(wrapper.state().to).to.equal(cloned_item.min + 1);
+
         expect(wrapper.state().from_warning).to.equal('hide');
         expect(wrapper.state().to_warning).to.equal('hide');
         expect(wrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.true;
         expect(wrapper.find('.button-block__range-from-warning').hasClass('hide')).to.be.true;
-        expect(spy.calledOnce).to.be.true;
         expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(mockItem().min + 1);
         expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(mockItem().from);
-        clock.restore();
       });
 
       it('TO > MAX', () => {
-        const item = mockItem();
-        const spy = sinon.spy();
-        const clock = sinon.useFakeTimers();
-        const wrapper = shallow(<Range item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__range-to-btn').simulate('change', {currentTarget: {dataset: {range: 'to'}, value: mockItem().max + 1}});
+        const change_event = {currentTarget: {dataset: {range: 'to'}, value: cloned_item.max + 1}};
+        wrapper.find('.button-block__range-to-btn').simulate('change', change_event);
+
+        expect(handle_range_change_event.calledWith(change_event)).to.be.true;
+        expect(handle_range_change_event.calledOnce).to.be.true;
+
         clock.tick(200);
+
+        expect(debounced_handle_change_event.calledWith(change_event.currentTarget)).to.be.true;
+        expect(debounced_handle_change_event.calledOnce).to.be.true;
+        expect(spy.calledOnce).to.be.true;
+        expect(spy.calledWith(Object.assign({
+          from_warning: 'hide',
+          to_warning: 'hide'
+        }, cloned_item))).to.be.true;
+        expect(wrapper.state().from).to.equal(cloned_item.from);
+        expect(wrapper.state().to).to.equal(cloned_item.to);
+
         expect(wrapper.state().from_warning).to.equal('hide');
         expect(wrapper.state().to_warning).to.equal('hide');
         expect(wrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.true;
         expect(wrapper.find('.button-block__range-from-warning').hasClass('hide')).to.be.true;
         expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(mockItem().max);
         expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(mockItem().from);
-        clock.restore();
       });
 
       it('TO < MAX', () => {
-        const item = mockItem();
-        const spy = sinon.spy();
-        const clock = sinon.useFakeTimers();
-        const wrapper = shallow(<Range item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__range-to-btn').simulate('change', {currentTarget: {dataset: {range: 'to'}, value: mockItem().max - 1}});
+        const change_event = {currentTarget: {dataset: {range: 'to'}, value: cloned_item.max - 1}};
+        wrapper.find('.button-block__range-to-btn').simulate('change', change_event);
+
+        expect(handle_range_change_event.calledWith(change_event)).to.be.true;
+        expect(handle_range_change_event.calledOnce).to.be.true;
+
         clock.tick(200);
+
+        expect(debounced_handle_change_event.calledWith(change_event.currentTarget)).to.be.true;
+        expect(debounced_handle_change_event.calledOnce).to.be.true;
+        expect(spy.calledOnce).to.be.true;
+        expect(spy.calledWith(Object.assign({
+          from_warning: 'hide',
+          to_warning: 'hide'
+        }, cloned_item, {to: cloned_item.max - 1}))).to.be.true;
+        expect(wrapper.state().from).to.equal(cloned_item.from);
+        expect(wrapper.state().to).to.equal(cloned_item.max - 1);
+
         expect(wrapper.state().from_warning).to.equal('hide');
         expect(wrapper.state().to_warning).to.equal('hide');
         expect(wrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.true;
         expect(wrapper.find('.button-block__range-from-warning').hasClass('hide')).to.be.true;
-        expect(spy.calledOnce).to.be.true;
         expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(mockItem().max - 1);
         expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(mockItem().from);
-        clock.restore();
       });
 
       it('FROM < MIN', () => {
-        const item = mockItem();
-        const spy = sinon.spy();
-        const clock = sinon.useFakeTimers();
-        const wrapper = shallow(<Range item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__range-from-btn').simulate('change', {currentTarget: {dataset: {range: 'from'}, value: mockItem().min - 1}});
+        const change_event = {currentTarget: {dataset: {range: 'from'}, value: cloned_item.min - 1}};
+        wrapper.find('.button-block__range-from-btn').simulate('change', change_event);
+
+        expect(handle_range_change_event.calledWith(change_event)).to.be.true;
+        expect(handle_range_change_event.calledOnce).to.be.true;
+
         clock.tick(200);
+
+        expect(debounced_handle_change_event.calledWith(change_event.currentTarget)).to.be.true;
+        expect(debounced_handle_change_event.calledOnce).to.be.true;
+        expect(spy.calledOnce).to.be.true;
+        expect(spy.calledWith(Object.assign({
+          from_warning: 'hide',
+          to_warning: 'hide'
+        }, cloned_item))).to.be.true;
+        expect(wrapper.state().from).to.equal(cloned_item.from);
+        expect(wrapper.state().to).to.equal(cloned_item.to);
+
         expect(wrapper.state().from_warning).to.equal('hide');
         expect(wrapper.state().to_warning).to.equal('hide');
         expect(wrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.true;
         expect(wrapper.find('.button-block__range-from-warning').hasClass('hide')).to.be.true;
-        expect(spy.calledOnce).to.be.true;
         expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(mockItem().to);
         expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(mockItem().min);
-        clock.restore();
       });
 
       it('FROM > MIN', () => {
-        const item = mockItem();
-        const spy = sinon.spy();
-        const clock = sinon.useFakeTimers();
-        const wrapper = shallow(<Range item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__range-from-btn').simulate('change', {currentTarget: {dataset: {range: 'from'}, value: mockItem().min + 1}});
+        const change_event = {currentTarget: {dataset: {range: 'from'}, value: cloned_item.min + 1}};
+        wrapper.find('.button-block__range-from-btn').simulate('change', change_event);
+
+        expect(handle_range_change_event.calledWith(change_event)).to.be.true;
+        expect(handle_range_change_event.calledOnce).to.be.true;
+
         clock.tick(200);
+
+        expect(debounced_handle_change_event.calledWith(change_event.currentTarget)).to.be.true;
+        expect(debounced_handle_change_event.calledOnce).to.be.true;
+        expect(spy.calledOnce).to.be.true;
+        expect(spy.calledWith(Object.assign({
+          from_warning: 'hide',
+          to_warning: 'hide'
+        }, cloned_item, {from: cloned_item.min + 1}))).to.be.true;
+        expect(wrapper.state().from).to.equal(cloned_item.from + 1);
+        expect(wrapper.state().to).to.equal(cloned_item.to);
+
         expect(wrapper.state().from_warning).to.equal('hide');
         expect(wrapper.state().to_warning).to.equal('hide');
         expect(wrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.true;
         expect(wrapper.find('.button-block__range-from-warning').hasClass('hide')).to.be.true;
-        expect(spy.calledOnce).to.be.true;
         expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(mockItem().to);
         expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(mockItem().min + 1);
-        clock.restore();
       });
 
       it('TO < FROM', () => {
-        const item = Object.assign({}, mockItem());
-        const spy = sinon.spy();
-        item.from = 20;
-        const clock = sinon.useFakeTimers();
-        const wrapper = shallow(<Range item={item} handle_change_event={spy}/>);
-        wrapper.find('.button-block__range-to-btn').simulate('change', {currentTarget: {dataset: {range: 'to'}, value: item.min}});
+        cloned_item.from = 20;
+        const spy = sinon.spy(),
+          wrapper = shallow(<Range item={cloned_item} handle_change_event={spy}/>),
+          change_event = {currentTarget: {dataset: {range: 'to'}, value: cloned_item.min}};
+        wrapper.find('.button-block__range-to-btn').simulate('change', change_event);
+
+        expect(handle_range_change_event.calledWith(change_event)).to.be.true;
+        expect(handle_range_change_event.calledOnce).to.be.true;
+
         clock.tick(200);
+
+        expect(debounced_handle_change_event.calledWith(change_event.currentTarget)).to.be.true;
+        expect(debounced_handle_change_event.calledOnce).to.be.true;
+        expect(spy.calledOnce).to.be.false;
+        expect(wrapper.state().from).to.equal(cloned_item.from);
+        expect(wrapper.state().to).to.equal(cloned_item.min);
+
         expect(wrapper.state().from_warning).to.equal('hide');
         expect(wrapper.state().to_warning).to.be.empty;
         expect(wrapper.find('.button-block__range-to-warning').hasClass('hide')).to.be.false;
         expect(wrapper.find('.button-block__range-from-warning').hasClass('hide')).to.be.true;
-        expect(spy.calledOnce).to.be.false;
-        expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(item.min);
-        expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(item.from);
-        clock.restore();
+        expect(wrapper.find('.button-block__range-to-btn').props().defaultValue).to.equal(cloned_item.min);
+        expect(wrapper.find('.button-block__range-from-btn').props().defaultValue).to.equal(cloned_item.from);
       });
     });
   });

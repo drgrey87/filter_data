@@ -45,7 +45,7 @@ export default class Range extends PureComponent {
         to_warning: 'hide',
         [is_from ? 'from' : 'to']: value
       }, () => {
-        this.props.handle_change_event(Object.assign(this.state));
+        this.props.handle_change_event(Object.assign({}, this.state));
       });
     } else {
       is_from
