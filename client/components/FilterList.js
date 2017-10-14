@@ -11,7 +11,7 @@ export default class FilterList extends Component {
   render () {
     let list_items;
     if (this.props.list.size > 0) {
-      list_items = this.props.list.map((item, number) => <FilterItem key={number.toString()} item={item} />);
+      list_items = this.props.list.map((item, number) => <FilterItem key={number.toString()} item={item} chage_favourite={this.props.chage_favourite} />);
     } else {
       list_items = null;
     }

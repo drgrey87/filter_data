@@ -81,6 +81,15 @@ User_schema.statics.findBy = function(data, user) {
     .then(result => result.filter(item => get_distance(user.city.lat, user.city.lon, item.city.lat, item.city.lon) >= data.distance.value));
 };
 
+User_schema.statics.findUserById = function(data) {
+  console.log('ddddd', data);
+  return this.findById(data._id)
+    .then(data => {
+      console.log('data', data)
+      return data;
+    });
+};
+
 const User = Mongoose.model('User', User_schema);
 
 module.exports = User;

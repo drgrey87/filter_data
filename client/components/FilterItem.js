@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class FilterItem extends Component {
   constructor(props) {
@@ -12,9 +13,11 @@ export default class FilterItem extends Component {
     let score = `${this.props.item.compatibility_score * 100}%`;
     return (
       <div className="list-item">
-        {photo}
+        <Link to={`/user_page/${this.props.item._id}`}>
+          {photo}
+        </Link>
         <span className="list-item__in-contact">{`contacts_exchanged - ${this.props.item.contacts_exchanged}`}</span>
-        <span className="list-item__favourite">{`favourite - ${this.props.item.favourite}`}</span>
+        <input className="list-item__favourite" defaultValue={this.props.item.favourite} onChange={this.props.chage_favourite}/>
         <span className="list-item__score">{`score - ${score}`}</span>
         <span className="list-item__age">{`age - ${this.props.item.age}`}</span>
         <span className="list-item__height">{`height_in_cm - ${this.props.item.height_in_cm}`}</span>

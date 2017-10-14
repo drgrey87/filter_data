@@ -42,6 +42,11 @@ app.get('/', (req, res) => {
     data: config.filter_data
   });
 });
+app.get('/user_page/:id', (req, res) => {
+  res.render('index', {
+    data: config.filter_data
+  });
+});
 app.get('/favicon.ico', function(req, res) {
   res.status(204);
 });

@@ -1,0 +1,31 @@
+.page {
+  $margin: 50px;
+
+  &-block {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+  }
+
+  &-view {
+    display: flex;
+    text-align: center;
+    margin: $margin;
+    //justify-content: space-around;
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: right;
+
+      &__item {
+        margin-bottom: 10px;
+      }
+    }
+
+    &-photo {
+      margin-right: $margin;
+    }
+  }
+}

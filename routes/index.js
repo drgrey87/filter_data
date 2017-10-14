@@ -10,4 +10,11 @@ router.post('/', (req, res) => {
     .catch(err => console.log(err));
 });
 
+router.get('/users/:id', (req, res) => {
+  console.log('3333333', req.params.id);
+  UserModel.findUserById({_id: req.params.id})
+    .then(data => res.send(data))
+    .catch(err => console.log(err));
+});
+
 module.exports = router;

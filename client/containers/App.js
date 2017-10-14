@@ -109,10 +109,12 @@ export class App extends PureComponent {
     return (
         <div className="main-block">
           <Panel handle_change_event={this.handle_change_event} handle_click_event={this.handle_click_event} buttons={this.state} />
-          <FilterList list={this.props.filter_data.get('data')}/>
+          <FilterList list={this.props.filter_data.get('data')} go_to_page_view={this.go_to_page_view}/>
         </div>
+      // </Router>
     )
   }
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

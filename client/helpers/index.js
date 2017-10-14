@@ -1,16 +1,27 @@
 'use strict';
 
-import config from '../config';
 import fetch from 'isomorphic-fetch';
 
-export function fetch_filtered_data(data) {
-  return fetch(`http://${config.app_server.ip}:${config.app_server.port}/data`, {
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method: 'post'
-  })
+export function fetch_filtered_data(url, method, data) {
+  let options = null;
+
+  switch (method) {
+    case 'get':
+      options = {method};
+      break;
+
+    case 'post':
+      options = {
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method
+      };
+      break;
+  }
+
+  return fetch(url, options)
     .then(data => data.json())
     .catch(err => console.log(err));
 };

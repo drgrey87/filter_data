@@ -25,7 +25,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('style.css')
   ],
-  // watch: true,
+  watch: true,
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1000
